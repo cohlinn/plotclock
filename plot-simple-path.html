@@ -1,0 +1,188 @@
+<html lang="en-US">
+<head>
+	<title></title>
+	<meta charset="utf-8"/>
+</head
+<body>
+<table><tr>
+	<td><canvas id="graphArea" width="280" height="400" style="border:1px solid #000000;"></canvas></td>
+	<td><div id="params"><form name="userdata" id="userdata" action="#">
+		<b>Parameters</b>
+		<br/>Stroke Type <input type="radio" name="stroke" value="Line" checked />Line  <input type="radio" name="stroke" value="Curve" />Curve
+		<br/>Start X = <input name="lastX" value=2 />, Y = <input name="lastY" value=2 />
+		<br/>bx = <input name="bx" value=6 />, by = <input name="by" value=9 />
+		<br/><i>For curves only</i>
+		<br/><select name="angle"><option value="Radian" checked>Radian</option><option value="Degree">Degree</option></select>
+				Start = <input name="start" value=3 />, Ende = <input name="end" value=0 />
+		<br/>Radius = <input name="radius" value=5 />, Sqee = <input name="sqee" value=1 />
+		<br/><input type="Submit" value="Calculate" onClick="javascript:draw(); return false;" />
+		<div id="RESULT"></div>
+	</form></div></td>
+</tr></table>
+	<div id="data"></div>
+</body>
+
+<script language="JavaScript">
+var colours=["#FF0000","#00AA00","#AAFFAA","#FF00FF",
+							 "#AAAA00","#FFFFAA","#0000FF",
+							 "#FFAA00","#00FFAA","#AA00FF"];
+var c = document.getElementById("graphArea");
+var d = document.getElementById("data");
+var res = document.getElementById("RESULT");
+var ctx = c.getContext("2d");
+
+var bx = 8;
+var by = 14;
+var radius = 6;
+var start = 3;
+var ende = -0.8;
+var sqee = 1;
+
+var lastX = 12;
+var lastY = 6;
+var stroke; //Line or Curve
+
+function draw()
+{
+	var f = document.getElementById("userdata");
+	lastX = f.lastX.value;
+	lastY = f.lastY.value;
+	bx = parseFloat(f.bx.value);
+	by = parseFloat(f.by.value);
+	alert("X=+"+bx);
+	ctx.clearRect(0, 0, c.width, c.height);
+	ctx.beginPath();
+	d.innerHTML = "";
+	
+	lastX = lastX * 20;
+	lastY = lastY * 20;
+	result="";
+	if(f.stroke.value == "Line")
+	{
+	//to draw straight line:
+		drawTo(bx,by,"#000000");
+		result="drawTo("+bx+","+by+")";
+	}
+	else
+	{
+	//to draw curves
+	//bogenUZS(bx, by, radius, start, ende, sqee);
+		radius = parseFloat(f.radius.value);
+		sqee = parseFloat(f.sqee.value);
+		//check angle type
+		if(f.angle.value == "Radian")
+		{
+			start = parseFloat(f.start.value);
+			ende = parseFloat(f.end.value);
+		}
+		else //convert degrees to radians
+		{
+			start = Math.radians(parseFloat(f.start.value));
+			ende = Math.radians(parseFloat(f.end.value));
+		}
+		//alert("Angle = "+start+" "+f.angle.value);
+		if(start >= ende)
+		{
+			bogenUZS(bx, by, radius, start, ende, sqee);
+			//bogenUZS(bx, by, radius, start, ende, sqee);
+			result="bogenUZS("+bx+","+by+","+radius+","+start+","+ende+","+sqee+")";
+		}
+		else
+		{
+			bogenGZS(bx, by, radius, start, ende, sqee);
+			result="bogenGZS("+bx+","+by+","+radius+","+start+","+ende+","+sqee+")";
+		}
+	}
+	res.innerHTML=res.innerHTML+"\n<br\>"+result;
+}
+
+function drawTo(x, y, colour)
+{
+
+	x = Math.floor(20*x);
+	y = Math.floor(20*y);
+	ctx.moveTo(lastX, lastY);
+	ctx.lineTo(x,y);
+	//alert("Draw from "+lastX+","+lastY+" to "+x+","+y);
+	ctx.strokeStyle = colour;
+	ctx.stroke();
+	lastX = x;
+	lastY = y;
+}
+
+//Curve counter clock-wise
+function bogenUZS(bx, by, radius, start, ende, sqee) 
+{
+  var inkr = -0.05;
+  var count = 0;
+	var loop = 10;
+	var rad=0;
+	d.innerHTML = d.innerHTML+"\n<br/><i>Angle start="+start+", ende="+ende+"</i>";
+	d.innerHTML = d.innerHTML+"\n<br/><b>Coordinates X,Y</b>";
+  do 
+	{
+		rad = start + count;
+    x=(sqee * radius * Math.cos(rad)) + bx;
+    y=(radius * Math.sin(rad)) + by;
+		d.innerHTML = d.innerHTML+"\n<br/>"+x+","+y;
+		//d.innerHTML = d.innerHTML+"\n<br/>Radians = "+start+"+"+count+"="+ rad;
+		//alert("Radians = "+start+"+"+count+"="+ (start + count));
+		drawTo(x,y, "#00FF00");
+    count += inkr;
+		//delay();
+  } 
+  while ((rad) > ende);
+	//while(loop-- > 0);
+
+}
+
+
+//Curve clock-wise
+function bogenGZS( bx,  by,  radius,  start,  ende,  sqee) 
+{
+  var inkr = 0.05;
+  var count = 0;
+	var rad=0;
+	
+	d.innerHTML = d.innerHTML+"\n<br/><i>Angle start="+start+", ende="+ende+"</i>";
+	d.innerHTML = d.innerHTML+"\n<br/><b>Coordinates X,Y</b>";
+  do {
+    //drawTo(sqee * radius * cos(start + count) + bx,
+		//		radius * sin(start + count) + by); 
+  	rad = start + count;
+    x=(sqee * radius * Math.cos(rad)) + bx;
+    y=(radius * Math.sin(rad)) + by;
+		d.innerHTML = d.innerHTML+"\n<br/>"+x+","+y;
+		drawTo(x,y, "#00AAAA");
+    count += inkr;
+  } 
+  while ((rad) <= ende);
+}
+
+
+// Converts from degrees to radians.
+Math.radians = function(degrees) {
+  return degrees * Math.PI / 180;
+}
+</script>
+<script language="Javascript">
+ //EXECUTION COMMANDS
+ //drawTo(12,20,"#FF0000");
+ //bogenUZS(bx + 8 * scale, by + 14 * scale, 6 * scale, 3, -0.8, 1);
+lastX = 2;
+lastY = 12;
+
+bx = 8;
+by = 14;
+radius = 6;
+start = 3;
+ende = -0.8;
+sqee = 1;
+
+lastX = lastX*20;
+lastY = lastY*20;
+//alert("drawTo("+bx+", "+by+", \"#000000\")");
+//drawTo(bx, by, "#000000");
+//bogenUZS(bx, by, radius, start, ende, sqee);
+bogenGZS(7, 10, 10, -0.8, 6.7, 0.5);
+ </script>
