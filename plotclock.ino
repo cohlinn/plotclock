@@ -19,14 +19,18 @@
 //#define REALTIMECLOCK    // enable real time clock
 
 // When in calibration mode, adjust the following factor until the servos move exactly 90 degrees
+//#define SERVOFAKTORLEFT 650
+//#define SERVOFAKTORRIGHT 650
 #define SERVOFAKTORLEFT 650
 #define SERVOFAKTORRIGHT 650
 
 // Zero-position of left and right servo
 // When in calibration mode, adjust the NULL-values so that the servo arms are at all times parallel
 // either to the X or Y axis
+//#define SERVOLEFTNULL 2250
+//#define SERVORIGHTNULL 920
 #define SERVOLEFTNULL 2250
-#define SERVORIGHTNULL 920
+#define SERVORIGHTNULL 600
 
 #define SERVOPINLIFT  2
 #define SERVOPINLEFT  3
@@ -41,9 +45,11 @@
 #define LIFTSPEED 1500
 
 // length of arms
-#define L1 35
-#define L2 55.1
-#define L3 13.2
+//#define L1 35
+//#define L2 55.1
+#define L1 65
+#define L2 75
+#define L3 15
 
 // origin points of left and right servo 
 #define O1X 22
@@ -121,11 +127,15 @@ void loop()
 #ifdef CALIBRATION
 
   // Servohorns will have 90° between movements, parallel to x and y axis
+  /*
   drawTo(-3, 29.2);
-  delay(500);
+  delay(5000);
   drawTo(74.1, 28);
-  delay(500);
-
+  delay(5000);
+  */
+  //number(34, 25, 1, 0.9);
+  number(34, 25, 8, 3);
+  delay(10000);
 #else 
 
 
