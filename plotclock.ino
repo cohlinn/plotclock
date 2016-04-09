@@ -37,9 +37,12 @@
 #define SERVOPINRIGHT 4
 
 // lift positions of lifting servo
-#define LIFT0 1080 // on drawing surface
-#define LIFT1 925  // between numbers
-#define LIFT2 725  // going towards sweeper
+//#define LIFT0 1080 // on drawing surface (90 degress)
+//#define LIFT1 925  // between numbers    (67.5)
+//#define LIFT2 725  // going towards sweeper  (45 degrees)
+#define LIFT0 1200 // on drawing surface (90 degress)
+#define LIFT1 1550  // between numbers    (67.5)
+#define LIFT2 1700  // going towards sweeper  (45 degrees)
 
 // speed of liftimg arm, higher is slower
 #define LIFTSPEED 1500
@@ -134,8 +137,14 @@ void loop()
   delay(5000);
   */
   //number(34, 25, 1, 0.9);
-  number(34, 25, 8, 3);
-  delay(10000);
+  //number(34, 25, 8, 3);
+  lift(0); // on drawing surface
+  delay(1000);
+  lift(1); // between numbers
+  delay(1000);
+  lift(2); // between numbers
+  delay(5000);
+//  lift(2); //going to sweeper
 #else 
 
 
