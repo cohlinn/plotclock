@@ -29,8 +29,12 @@
 // either to the X or Y axis
 //#define SERVOLEFTNULL 2250
 //#define SERVORIGHTNULL 920
-#define SERVOLEFTNULL 2250
-#define SERVORIGHTNULL 600
+//proto 1
+//#define SERVOLEFTNULL 2250
+//#define SERVORIGHTNULL 600
+//proto 2
+#define SERVOLEFTNULL 2400
+#define SERVORIGHTNULL 420
 
 #define SERVOPINLIFT  2
 #define SERVOPINLEFT  3
@@ -135,15 +139,27 @@ void loop()
   delay(5000);
   drawTo(74.1, 28);
   delay(5000);
+  //
   */
+  
   //number(34, 25, 1, 0.9);
-  //number(34, 25, 8, 3);
+  //number(40, -15, 0, 1);
+  number(40,   15, 0, 1);
+  /*
+  int scale=3;
+  drawTo(5*scale,-5*scale);
+  delay(1000);
+  drawTo(10*scale,0*scale);
+  delay(2000);
+  */
+/*  
   lift(0); // on drawing surface
   delay(1000);
   lift(1); // between numbers
   delay(1000);
-  lift(2); // between numbers
+  lift(2); // erase
   delay(5000);
+  */
 //  lift(2); //going to sweeper
 #else 
 
