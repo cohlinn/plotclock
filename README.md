@@ -24,4 +24,11 @@ See: http://www.thingiverse.com/thing:248009/#instructions
 
 --
 
-this actually is my first git project, so merging, forks etc. is still new to me and could take some time
+Helper files
+------------
+1) plot-simple-path.html
+Simple browser application to test input parameters for lines and curves.
+
+2) Frame design files (Google drive or some other links)
+
+3) Calibration instruction document for coupling hardware with software.
