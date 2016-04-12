@@ -153,14 +153,12 @@ void loop()
   delay(2000);
   */
 /*  
-  lift(0); // on drawing surface
+  lift(0); // on drawing surface (highest position 90 degrees). Adjust LIFT0.
   delay(1000);
-  lift(1); // between numbers
+  lift(1); // between numbers (middle position ~ 68.5 degrees). Adjust LIFT1.
   delay(1000);
-  lift(2); // erase
-  delay(5000);
+  lift(2); // erase board (lowest position ~ 45 degrees). Adjust LIFT2.
   */
-//  lift(2); //going to sweeper
 #else 
 
 
