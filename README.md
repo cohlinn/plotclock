@@ -32,3 +32,4 @@ Simple browser application to test input parameters for lines and curves.
 2) Frame design files (Google drive or some other links)
 
 3) Calibration instruction document for coupling hardware with software.
+https://docs.google.com/document/d/1tRF-mvN93Q7fd_6Xhu0Pd_ySboKbsE2CJW8vRxgm8Ns/edit?usp=sharing
