@@ -28,3 +28,7 @@ Helper files
 ------------
 1) plot-simple-path.html
 Simple browser application to test input parameters for lines and curves.
+
+2) Frame design files (Google drive or some other links)
+
+3) Calibration instruction document for coupling hardware with software.
