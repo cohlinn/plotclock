@@ -1,0 +1,247 @@
+<html lang="en-US">
+<head>
+	<title></title>
+	<meta charset="utf-8"/>
+</head
+<body>
+<table><tr>
+	<td><canvas id="graphArea" width="280" height="400" style="border:1px solid #000000;"></canvas></td>
+	<td><div id="params"><form name="userdata" id="userdata" action="#">
+		<b>Draw Characters</b>
+		<br/>Character: <input name="char" maxlength="1" />
+		<br/><button type="button" onClick="return draw()" > Draw </button>
+		<div id="CHARMAP">
+			<br/><button type="button" onClick="return drawTarget('0')" > 0 </button>
+				<button type="button" onClick="return drawTarget('1')" > 1 </button>
+				<button type="button" onClick="return drawTarget('2')" > 2 </button>
+				<button type="button" onClick="return drawTarget('3')" > 3 </button>
+				<button type="button" onClick="return drawTarget('4')" > 4 </button>
+			<br/><button type="button" onClick="return drawTarget('5')" > 5 </button>
+				<button type="button" onClick="return drawTarget('6')" > 6 </button>
+				<button type="button" onClick="return drawTarget('7')" > 7 </button>
+				<button type="button" onClick="return drawTarget('8')" > 8 </button>
+				<button type="button" onClick="return drawTarget('9')" > 9 </button>
+			<br/><button type="button" onClick="return drawTarget('A')" > A </button>
+				<button type="button" onClick="return drawTarget('B')" > B </button>
+				<button type="button" onClick="return drawTarget('C')" > C </button>
+				<button type="button" onClick="return drawTarget('D')" > D </button>
+				<button type="button" onClick="return drawTarget('E')" > E </button>
+		</div>
+	</form></div></td>
+</tr></table>
+	<div id="data"></div>
+</body>
+
+<script language="JavaScript">
+var colour = "#AA00FF";
+var c = document.getElementById("graphArea");
+var d = document.getElementById("data");
+var res = document.getElementById("RESULT");
+var ctx = c.getContext("2d");
+var SCALE = 20; //14x20 exploded to 280x400 pixels canvas
+
+var bx = 8;
+var by = 14;
+var radius = 6;
+var start = 3;
+var ende = -0.8;
+var sqee = 1;
+
+var lastX = 12;
+var lastY = 6;
+var stroke; //Line or Curve
+
+
+function draw()
+{
+	var f = document.getElementById("userdata");
+	var target = f.char.value;
+	drawTarget(target);
+	return false;
+}
+
+function drawTarget(target)
+{
+	ctx.clearRect(0, 0, c.width, c.height);
+	ctx.beginPath();
+	d.innerHTML = "";
+
+	switch(target)
+	{
+		case "0":
+			startPoint(12, 6); //Where to start the stroke
+			bogenGZS(7, 10, 10, -0.8, 6.7, 0.5);
+			break;
+		
+		case "1":
+			startPoint(3, 15); //Where to start the stroke
+			drawTo(10, 20);
+			drawTo(10, 0);
+			break;
+		
+		case "2":
+			startPoint(2, 12);
+			bogenUZS(8, 14, 6, 3, -0.8, 1);
+			drawTo(1, 0);
+			drawTo(12, 0);
+			break;
+
+		case "3":
+			startPoint(2, 17);
+			bogenUZS(5, 15, 5, 3, -2, 1);
+			bogenUZS(5, 5, 5, 1.57, -3, 1);
+			lift(1);
+			break;
+
+		case "4":
+			startPoint(10, 0);
+			drawTo(10, 20);
+			drawTo(2, 6);
+			drawTo(12, 6);
+			break;
+
+		case "5":
+			startPoint(2, 5);
+			bogenGZS(5, 6, 6, -2.5, 2, 1);
+			drawTo(5, 20);
+			drawTo(12, 20);
+			break;
+
+		case "6":
+			startPoint(2, 10);
+			bogenUZS(7, 6, 6, 2, -4.4, 1);
+			drawTo(11, 20);
+			break;
+
+		case "7":
+			startPoint(2, 20);
+			drawTo(12, 20);
+			drawTo(2, 0);
+			break;
+
+		case "8":
+			startPoint(5, 10);
+			bogenUZS(5, 15, 5, 4.7, -1.6, 1);
+			bogenGZS(5, 5, 5, -4.7, 2, 1);
+			break;
+
+		case "9":
+			startPoint(9, 11);
+			bogenUZS(7, 15, 5, 4, -0.5, 1);
+			drawTo(5, 0);
+			break;
+			
+		case "A":
+			startPoint(2, 0);
+			drawTo(7, 20);
+			drawTo(12, 0);
+			drawTo(9.5, 10);
+			drawTo(4.5, 10);
+			break;
+		
+		case "B":
+			startPoint(2, 0);
+			bogenUZS(2, 15, 5, 2.5*Math.PI, 1.5*Math.PI, 1);
+			bogenUZS(2, 5, 5, 2.5*Math.PI, 1.5*Math.PI, 1.5);
+			break;
+		
+		case "C":
+			startPoint(11, 16);
+			bogenGZS(7, 10, 10, 0.2*Math.PI, 1.8*Math.PI, 0.5);
+			break;
+
+		default:
+			d.innerHTML = d.innerHTML+"\n<br/>Character not found:  "+ target;
+	}
+	
+	return false;
+}
+
+
+
+function startPoint(x, y)
+{
+	d.innerHTML = d.innerHTML+"\n<br/>Start from : drawTo(bx + "+x+" * scale, by + "+y+" * scale);";
+	lastX = x * SCALE;
+	lastY = y * SCALE;
+}
+
+function drawTo(x, y, colour)
+{
+	d.innerHTML = d.innerHTML+"\n<br/>drawTo(bx + "+x+" * scale, by + "+y+" * scale);";
+	drawToActual(x, y, colour);
+}
+
+//Curve counter clock-wise
+function bogenUZS(bx, by, radius, start, ende, sqee) 
+{
+  var inkr = -0.05;
+  var count = 0;
+	var loop = 10;
+	var rad=0;
+	d.innerHTML = d.innerHTML+"\n<br/>bogenUZS(bx + "+bx+" * scale, by + "+by+" * scale, "+
+																radius+" * scale, "+start+", "+ende+", "+sqee+");";
+  do 
+	{
+		rad = start + count;
+    x=(sqee * radius * Math.cos(rad)) + bx;
+    y=(radius * Math.sin(rad)) + by;
+		//d.innerHTML = d.innerHTML+"\n<br/>"+x+","+y;
+		//d.innerHTML = d.innerHTML+"\n<br/>Radians = "+start+"+"+count+"="+ rad;
+		//alert("Radians = "+start+"+"+count+"="+ (start + count));
+		drawToActual(x,y, "#00FF00");
+    count += inkr;
+		//delay();
+  } 
+  while ((rad) > ende);
+	//while(loop-- > 0);
+
+}
+
+
+//Curve clock-wise
+function bogenGZS( bx,  by,  radius,  start,  ende,  sqee) 
+{
+  var inkr = 0.05;
+  var count = 0;
+	var rad=0;
+	
+	d.innerHTML = d.innerHTML+"\n<br/>bogenGZS(bx + "+bx+" * scale, by + "+by+" * scale, "+
+																radius+" * scale, "+start+", "+ende+", "+sqee+");";
+  do {
+    //drawTo(sqee * radius * cos(start + count) + bx,
+		//		radius * sin(start + count) + by); 
+  	rad = start + count;
+    x=(sqee * radius * Math.cos(rad)) + bx;
+    y=(radius * Math.sin(rad)) + by;
+		//d.innerHTML = d.innerHTML+"\n<br/>"+x+","+y;
+		drawToActual(x,y, "#00AAAA");
+    count += inkr;
+  } 
+  while ((rad) <= ende);
+}
+
+function drawToActual(x, y, colour)
+{
+	x = Math.floor(SCALE*x);
+	y = Math.floor(SCALE*y);
+	//invert the Y axis
+	iLastY = 400 - lastY;
+	iY		 = 400 - y;
+	ctx.moveTo(lastX, iLastY);
+	ctx.lineTo(x,iY);
+	//alert("Draw from "+lastX+","+lastY+" to "+x+","+y);
+	ctx.strokeStyle = colour;
+	ctx.stroke();
+	lastX = x;
+	lastY = y;
+}
+
+// Converts from degrees to radians.
+Math.radians = function(degrees) {
+  return degrees * Math.PI / 180;
+}
+</script>
+<script language="Javascript">
+
+ </script>
